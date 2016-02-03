@@ -50,7 +50,8 @@ def softmax_classifier(tensor_in, labels, weights, biases, class_weight=None, na
                                                        labels,
                                                        name="xent_raw")
         if class_weight:
-            xent = tf.mul(xent, class_weight)
+            label_weights = tf.reduce_mean(tf.mul(labels, class_weight), 1)
+            xent = tf.mul(xent, label_weights)
         loss = tf.reduce_mean(xent, name="xent")
         predictions = tf.nn.softmax(logits, name=name)
         return predictions, loss
